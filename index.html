@@ -149,20 +149,19 @@
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
         }
 
-        /* --- CORRECCIÓN DEL BUG DE HOVER --- */
         .dropdown {
             position: relative;
         }
 
         .dropdown-content {
             position: absolute;
-            left: 100%; /* Alineado justo al borde */
+            left: 100%;
             top: 50%;
             transform: translateY(-50%);
             display: flex;
             flex-direction: column;
             gap: 12px;
-            padding-left: 15px; /* Este espacio actúa como puente para el ratón */
+            padding-left: 15px;
             pointer-events: none;
             visibility: hidden;
             z-index: 10;
@@ -191,7 +190,6 @@
             animation: floating 3.5s ease-in-out infinite;
         }
 
-        /* Retrasos para aparición y animación de flotación */
         .dropdown:hover .btn-sub:nth-child(1) { transition-delay: 0.1s; animation-delay: 0s; }
         .dropdown:hover .btn-sub:nth-child(2) { transition-delay: 0.2s; animation-delay: 0.6s; }
         .dropdown:hover .btn-sub:nth-child(3) { transition-delay: 0.3s; animation-delay: 1.2s; }
@@ -244,7 +242,7 @@
     <div class="ambient-glow"></div>
 
     <div class="video-background">
-        <iframe src="https://www.youtube.com/embed/gxetb5bjA34?autoplay=1&mute=1&loop=1&playlist=gxetb5bjA34&controls=0&showinfo=0&rel=0&modestbranding=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/gxetb5bjA34?autoplay=1&mute=1&loop=1&playlist=gxetb5bjA34&controls=0&showinfo=0&rel=0&modestbranding=1&start=1&end=179" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
 
     <div class="overlay"></div>
@@ -280,6 +278,7 @@
     </div>
 
     <script>
+        // Cursor
         const cursor = document.getElementById('custom-cursor');
         const links = document.querySelectorAll('a, button');
 
@@ -299,6 +298,7 @@
             });
         });
 
+        // Parallax
         const glassPanel = document.querySelector('.glass-panel');
         const instructPanel = document.querySelector('.instruction-panel');
 
@@ -310,6 +310,7 @@
             instructPanel.style.transform = `rotateY(${xAxis * 1.2}deg) rotateX(${yAxis * 1.2}deg)`;
         });
 
+        // Contenido
         const content = {
             es: `INSTRUCCIONES:
             Comienza solicitando a una IA la creación de un archivo HTML utilizando un prompt.

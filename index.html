@@ -1,11 +1,17 @@
-<style>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Creation</title>
+    <style>
         /* Reset de estilos */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            cursor: none; /* Oculta el cursor real para usar el personalizado */
+            cursor: none; /* Ocultamos el cursor para usar el personalizado */
         }
 
         body {
@@ -17,24 +23,42 @@
             background-color: #000;
         }
 
-        /* --- CURSOR PERSONALIZADO LUMINOSO --- */
+        /* --- CURSOR PERSONALIZADO --- */
         #custom-cursor {
             width: 20px;
             height: 20px;
             background: rgba(255, 255, 255, 0.6);
             border-radius: 50%;
             position: fixed;
-            pointer-events: none; /* No interfiere con los clicks */
+            pointer-events: none;
             z-index: 10000;
             transition: transform 0.1s ease, background 0.2s ease;
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+        }
+
+        /* --- LUCES AMBIENTALES --- */
+        .ambient-glow {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 10% 10%, rgba(30, 144, 255, 0.15) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 90%, rgba(138, 43, 226, 0.15) 0%, transparent 40%);
+            z-index: -1;
+            pointer-events: none;
+            animation: glowMove 15s ease infinite alternate;
+        }
+
+        @keyframes glowMove {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.1); opacity: 1; }
         }
 
         .video-background {
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
-            z-index: -1;
+            z-index: -2;
             pointer-events: none;
             overflow: hidden;
         }
@@ -52,10 +76,10 @@
             top: 0; left: 0;
             width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            z-index: 0;
+            z-index: -1;
         }
 
-        /* --- CONTENEDOR PRINCIPAL CON ANIMACIÓN INICIAL --- */
+        /* --- CONTENEDOR PRINCIPAL CON PERSPECTIVA --- */
         .main-container {
             position: relative;
             z-index: 1;
@@ -65,7 +89,7 @@
             width: 90%;
             max-width: 420px;
             align-items: center;
-            /* Animación de entrada */
+            perspective: 1000px; /* Necesario para el efecto 3D */
             animation: containerAppear 1s ease-out;
         }
 
@@ -74,7 +98,6 @@
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        /* --- PANEL CENTRAL MEJORADO --- */
         .glass-panel {
             padding: 3rem;
             width: 100%;
@@ -84,12 +107,11 @@
             border-radius: 28px;
             border: 1px solid rgba(255, 255, 255, 0.08);
             text-align: center;
-            /* Sombra más suave y extendida */
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-            transition: border 0.3s ease;
+            transition: transform 0.1s ease; /* Suaviza el movimiento del ratón */
+            transform-style: preserve-3d;
         }
 
-        /* --- TÍTULO CON EFECTO NEÓN SUTIL --- */
         h1 {
             color: #fff;
             font-size: 2.2rem;
@@ -106,7 +128,6 @@
             gap: 1.3rem;
         }
 
-        /* --- BOTONES MEJORADOS --- */
         .btn {
             display: block;
             padding: 16px;
@@ -115,26 +136,206 @@
             font-size: 1.05rem;
             font-weight: 400;
             letter-spacing: 1.5px;
-            /* Borde más transparente */
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 14px;
-            /* Transición más rápida para el hover */
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             background: rgba(255, 255, 255, 0.01);
             position: relative;
             z-index: 5;
-            overflow: hidden; /* Para el brillo interno */
         }
 
-        /* Brillo de borde en hover */
         .btn:hover {
             background: rgba(255, 255, 255, 0.08);
             color: #fff;
-            transform: scale(1.03);
+            transform: scale(1.03) translateZ(20px); /* El botón "sale" un poco */
             border-color: rgba(255, 255, 255, 0.6);
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
         }
 
-        /* Pequeño brillo interno al pulsar */
-        .btn:active {
-            background: rgba(255, 255, 255, 0.2);
+        /* --- SUB-BOTONES IA --- */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            left: calc(100% + 20px);
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+            visibility: hidden;
+            z-index: 10;
+        }
+
+        .btn-sub {
+            width: 170px;
+            padding: 11px;
+            font-size: 0.88rem;
+            opacity: 0;
+            transform: translateX(-20px);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dropdown:hover .dropdown-content {
+            pointer-events: auto;
+            visibility: visible;
+        }
+
+        .dropdown:hover .btn-sub {
+            opacity: 1;
+            transform: translateX(0);
+            animation: floating 3.5s ease-in-out infinite;
+        }
+
+        /* Retrasos para aparición y animación de flotación */
+        .dropdown:hover .btn-sub:nth-child(1) { transition-delay: 0.1s; animation-delay: 0s; }
+        .dropdown:hover .btn-sub:nth-child(2) { transition-delay: 0.2s; animation-delay: 0.6s; }
+        .dropdown:hover .btn-sub:nth-child(3) { transition-delay: 0.3s; animation-delay: 1.2s; }
+        .dropdown:hover .btn-sub:nth-child(4) { transition-delay: 0.4s; animation-delay: 1.8s; }
+
+        @keyframes floating {
+            0% { transform: translateY(0px) translateX(0px); }
+            50% { transform: translateY(-6px) translateX(3px); }
+            100% { transform: translateY(0px) translateX(0px); }
+        }
+
+        /* --- PANEL DE INSTRUCCIONES --- */
+        .instruction-panel {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1.8rem;
+            color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            transition: transform 0.1s ease;
+        }
+
+        .lang-container {
+            display: flex; gap: 12px; margin-bottom: 1.2rem;
+        }
+
+        .btn-lang { flex: 1; padding: 7px; font-size: 0.8rem; text-transform: uppercase; }
+
+        .instruction-content {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.2rem;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-height: 160px;
+            overflow-y: auto;
+            white-space: pre-line;
+            text-align: left;
+        }
+
+        .instruction-content::-webkit-scrollbar { width: 4px; }
+        .instruction-content::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="custom-cursor"></div>
+    <div class="ambient-glow"></div>
+
+    <div class="video-background">
+        <iframe src="https://www.youtube.com/embed/gxetb5bjA34?autoplay=1&mute=1&loop=1&playlist=gxetb5bjA34&controls=0&showinfo=0&rel=0&modestbranding=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+
+    <div class="overlay"></div>
+
+    <div class="main-container">
+        <div class="glass-panel">
+            <h1>Page Creation</h1>
+            <nav class="button-list">
+                <div class="dropdown">
+                    <a href="https://ai-delta-eosin.vercel.app/" target="_blank" class="btn">IA</a>
+                    <div class="dropdown-content">
+                        <a href="https://gemini.google.com/app?hl=es" target="_blank" class="btn btn-sub">Google Gemini</a>
+                        <a href="https://hackerai.co/" target="_blank" class="btn btn-sub">HackerAI</a>
+                        <a href="https://claude.ai/new" target="_blank" class="btn btn-sub">ClaudeAI</a>
+                        <a href="https://chatgpt.com/" target="_blank" class="btn btn-sub">ChatGPT</a>
+                    </div>
+                </div>
+                <a href="https://github.com/" target="_blank" class="btn">GitHub</a>
+                <a href="https://vercel.com/" target="_blank" class="btn">Vercel</a>
+                <a href="https://www.youtube.com/" target="_blank" class="btn">YouTube</a>
+            </nav>
+        </div>
+
+        <div class="instruction-panel">
+            <div class="lang-container">
+                <button class="btn btn-lang" onclick="setLang('es')">Español</button>
+                <button class="btn btn-lang" onclick="setLang('en')">English</button>
+            </div>
+            <div id="text-target" class="instruction-content">
+                <p style="opacity: 0.5; text-align: center; font-size: 0.8rem;">Select language for tutorial</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Lógica del Cursor Personalizado
+        const cursor = document.getElementById('custom-cursor');
+        const links = document.querySelectorAll('a, button');
+
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        links.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                cursor.style.background = 'rgba(255, 255, 255, 0.9)';
+            });
+            link.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursor.style.background = 'rgba(255, 255, 255, 0.6)';
+            });
+        });
+
+        // 2. Lógica del Efecto Inclinación 3D (Tilt)
+        const glassPanel = document.querySelector('.glass-panel');
+        const instructPanel = document.querySelector('.instruction-panel');
+
+        document.addEventListener('mousemove', e => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 35;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 35;
+
+            glassPanel.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            instructPanel.style.transform = `rotateY(${xAxis * 1.2}deg) rotateX(${yAxis * 1.2}deg)`;
+        });
+
+        // 3. Lógica de Idiomas
+        const content = {
+            es: `INSTRUCCIONES:
+            Comienza solicitando a una IA la creación de un archivo HTML utilizando un prompt.
+            Luego, crea un repositorio en GitHub. Dentro del repositorio, agrega un nuevo archivo llamado "index.html" y pega el código HTML generado.
+            Guarda los cambios en el repositorio para asegurarte de no perder el archivo.
+            Dirígete a Vercel y regístrate o inicia sesión utilizando tu cuenta de GitHub.
+            Una vez dentro, selecciona la opción "Add New Project" y elige el repositorio que creaste.
+            Finalmente, despliega el proyecto.`,
+            en: `INSTRUCTIONS:
+            Start by requesting an AI to create an HTML file using a prompt.
+            Then, create a repository on GitHub. Inside the repository, add a new file called "index.html" and paste the generated HTML code.
+            Save the changes to the repository to ensure you don't lose the file.
+            Go to Vercel and register or log in using your GitHub account.
+            Once logged in, select the "Add New Project" option and choose the repository you created.
+            Finally, expand the project.`
+        };
+
+        function setLang(lang) {
+            document.getElementById('text-target').innerText = content[lang];
+        }
+    </script>
+</body>
+</html>

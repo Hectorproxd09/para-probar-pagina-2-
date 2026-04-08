@@ -1,0 +1,140 @@
+<style>
+        /* Reset de estilos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            cursor: none; /* Oculta el cursor real para usar el personalizado */
+        }
+
+        body {
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+        }
+
+        /* --- CURSOR PERSONALIZADO LUMINOSO --- */
+        #custom-cursor {
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none; /* No interfiere con los clicks */
+            z-index: 10000;
+            transition: transform 0.1s ease, background 0.2s ease;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .video-background {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .video-background iframe {
+            width: 100vw; height: 56.25vw;
+            min-height: 100vh; min-width: 177.77vh;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+
+        /* --- CONTENEDOR PRINCIPAL CON ANIMACIÓN INICIAL --- */
+        .main-container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 90%;
+            max-width: 420px;
+            align-items: center;
+            /* Animación de entrada */
+            animation: containerAppear 1s ease-out;
+        }
+
+        @keyframes containerAppear {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* --- PANEL CENTRAL MEJORADO --- */
+        .glass-panel {
+            padding: 3rem;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: center;
+            /* Sombra más suave y extendida */
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            transition: border 0.3s ease;
+        }
+
+        /* --- TÍTULO CON EFECTO NEÓN SUTIL --- */
+        h1 {
+            color: #fff;
+            font-size: 2.2rem;
+            font-weight: 300;
+            letter-spacing: 5px;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+        }
+
+        .button-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.3rem;
+        }
+
+        /* --- BOTONES MEJORADOS --- */
+        .btn {
+            display: block;
+            padding: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 1.05rem;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            /* Borde más transparente */
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            /* Transición más rápida para el hover */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.01);
+            position: relative;
+            z-index: 5;
+            overflow: hidden; /* Para el brillo interno */
+        }
+
+        /* Brillo de borde en hover */
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            transform: scale(1.03);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Pequeño brillo interno al pulsar */
+        .btn:active {
+            background: rgba(255, 255, 255, 0.2);

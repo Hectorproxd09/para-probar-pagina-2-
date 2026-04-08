@@ -11,7 +11,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            cursor: none; /* Ocultamos el cursor para usar el personalizado */
+            cursor: none;
         }
 
         body {
@@ -23,7 +23,6 @@
             background-color: #000;
         }
 
-        /* --- CURSOR PERSONALIZADO --- */
         #custom-cursor {
             width: 20px;
             height: 20px;
@@ -37,7 +36,6 @@
             transform: translate(-50%, -50%);
         }
 
-        /* --- LUCES AMBIENTALES --- */
         .ambient-glow {
             position: fixed;
             top: 0; left: 0;
@@ -79,7 +77,6 @@
             z-index: -1;
         }
 
-        /* --- CONTENEDOR PRINCIPAL CON PERSPECTIVA --- */
         .main-container {
             position: relative;
             z-index: 1;
@@ -89,7 +86,7 @@
             width: 90%;
             max-width: 420px;
             align-items: center;
-            perspective: 1000px; /* Necesario para el efecto 3D */
+            perspective: 1000px;
             animation: containerAppear 1s ease-out;
         }
 
@@ -108,7 +105,7 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             text-align: center;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-            transition: transform 0.1s ease; /* Suaviza el movimiento del ratón */
+            transition: transform 0.1s ease;
             transform-style: preserve-3d;
         }
 
@@ -147,24 +144,25 @@
         .btn:hover {
             background: rgba(255, 255, 255, 0.08);
             color: #fff;
-            transform: scale(1.03) translateZ(20px); /* El botón "sale" un poco */
+            transform: scale(1.03) translateZ(20px);
             border-color: rgba(255, 255, 255, 0.6);
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
         }
 
-        /* --- SUB-BOTONES IA --- */
+        /* --- CORRECCIÓN DEL BUG DE HOVER --- */
         .dropdown {
             position: relative;
         }
 
         .dropdown-content {
             position: absolute;
-            left: calc(100% + 20px);
+            left: 100%; /* Alineado justo al borde */
             top: 50%;
             transform: translateY(-50%);
             display: flex;
             flex-direction: column;
             gap: 12px;
+            padding-left: 15px; /* Este espacio actúa como puente para el ratón */
             pointer-events: none;
             visibility: hidden;
             z-index: 10;
@@ -175,7 +173,7 @@
             padding: 11px;
             font-size: 0.88rem;
             opacity: 0;
-            transform: translateX(-20px);
+            transform: translateX(-10px);
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -205,7 +203,6 @@
             100% { transform: translateY(0px) translateX(0px); }
         }
 
-        /* --- PANEL DE INSTRUCCIONES --- */
         .instruction-panel {
             width: 100%;
             background: rgba(255, 255, 255, 0.04);
@@ -283,7 +280,6 @@
     </div>
 
     <script>
-        // 1. Lógica del Cursor Personalizado
         const cursor = document.getElementById('custom-cursor');
         const links = document.querySelectorAll('a, button');
 
@@ -303,7 +299,6 @@
             });
         });
 
-        // 2. Lógica del Efecto Inclinación 3D (Tilt)
         const glassPanel = document.querySelector('.glass-panel');
         const instructPanel = document.querySelector('.instruction-panel');
 
@@ -315,7 +310,6 @@
             instructPanel.style.transform = `rotateY(${xAxis * 1.2}deg) rotateX(${yAxis * 1.2}deg)`;
         });
 
-        // 3. Lógica de Idiomas
         const content = {
             es: `INSTRUCCIONES:
             Comienza solicitando a una IA la creación de un archivo HTML utilizando un prompt.

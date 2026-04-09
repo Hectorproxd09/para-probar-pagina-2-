@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Creation</title>
+    <style>
+        /* Reset de estilos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', Helvetica, Arial, sans-serif;
+            cursor: none;
+        }
+
+        body {
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+        }
+
+        #custom-cursor {
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            backdrop-filter: blur(1px);
+        }
+
+        #custom-cursor.hover {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
+        }
+
+        .ambient-glow {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 15% 20%, rgba(220, 20, 60, 0.18) 0%, transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(139, 0, 0, 0.18) 0%, transparent 45%),
+                radial-gradient(circle at 50% 10%, rgba(120, 119, 198, 0.12) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+            animation: glowMove 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes glowMove {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.7; }
+            100% { transform: scale(1.15) rotate(1deg); opacity: 1; }
+        }
+
+        .video-background {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -2;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .video-background iframe {
+            width: 100vw; height: 56.25vw;
+            min-height: 100vh; min-width: 177.77vh;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            filter: brightness(0.6) contrast(1.1);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: -1;
+        }
+
+        .main-container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 90%;
+            max-width: 440px;
+            align-items: center;
+            perspective: 1200px;
+            animation: containerAppear 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes containerAppear {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px) scale(0.92) rotateX(5deg); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1) rotateX(0deg); 
+            }
+        }
+
+        .glass-panel {
+            padding: 3.2rem 3rem;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: center;
+            box-shadow: 
+                0 25px 70px rgba(0, 0, 0, 0.45),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 2.4rem;
+            font-weight: 200;
+            letter-spacing: 6px;
+            margin-bottom: 3.5rem;
+            text-transform: uppercase;
+            text-shadow: 
+                0 0 20px rgba(255, 255, 255, 0.5),
+                0 0 40px rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            border-radius: 1px;
+        }
+
+        .button-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .btn {
+            display: block;
+            padding: 18px 24px;
+            color: rgba(255, 255, 255, 0.92);
+            text-decoration: none;
+            font-size: 1.08rem;
+            font-weight: 400;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 18px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.015);
+            position: relative;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transform: scale(1.05) translateZ(25px);
+            border-color: rgba(255, 255, 255, 0.7);
+            box-shadow: 
+                0 15px 35px rgba(255, 255, 255, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding-left: 20px;
+            pointer-events: none;
+            visibility: hidden;
+            opacity: 0;
+            z-index: 10;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-sub {
+            width: 180px;
+            padding: 14px 18px;
+            font-size: 0.92rem;
+            opacity: 0;
+            transform: translateX(-15px) scale(0.95);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            letter-spacing: 1px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .dropdown:hover .dropdown-content {
+            pointer-events: auto;
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(-50%) translateX(8px);
+        }
+
+        .dropdown:hover .btn-sub {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+        }
+
+        .dropdown:hover .btn-sub:nth-child(1) { transition-delay: 0.1s; }
+        .dropdown:hover .btn-sub:nth-child(2) { transition-delay: 0.15s; }
+        .dropdown:hover .btn-sub:nth-child(3) { transition-delay: 0.2s; }
+        .dropdown:hover .btn-sub:nth-child(4) { transition-delay: 0.25s; }
+        .dropdown:hover .btn-sub:nth-child(5) { transition-delay: 0.3s; }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            50% { transform: translateY(-8px) translateX(4px); }
+        }
+
+        .btn-sub:hover {
+            transform: scale(1.02) translateY(-2px) !important;
+            box-shadow: 0 12px 35px rgba(255, 255, 255, 0.2);
+        }
+
+        .instruction-panel {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 26px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 2.2rem;
+            color: rgba(255, 255, 255, 0.92);
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .instruction-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        }
+
+        .lang-container {
+            display: flex; 
+            gap: 14px; 
+            margin-bottom: 1.6rem;
+        }
+
+        .btn-lang { 
+            flex: 1; 
+            padding: 10px 16px; 
+            font-size: 0.85rem; 
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 12px;
+        }
+
+        .instruction-content {
+            background: rgba(0, 0, 0, 0.35);
+            padding: 1.6rem;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            max-height: 180px;
+            overflow-y: auto;
+            white-space: pre-line;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+        }
+
+        .instruction-content::before {
+            content: '💡';
+            position: absolute;
+            top: -8px; left: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .instruction-content {
+            padding-top: 2.2rem;
+        }
+
+        .instruction-content::-webkit-scrollbar { 
+            width: 6px; 
+        }
+        .instruction-content::-webkit-scrollbar-thumb { 
+            background: rgba(255, 255, 255, 0.2); 
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,0.2);
+        }
+        .instruction-content::-webkit-scrollbar-track { 
+            background: rgba(0,0,0,0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .glass-panel { padding: 2.5rem 2rem; }
+            h1 { font-size: 2rem; letter-spacing: 4px; }
+            .btn-sub { width: 160px; font-size: 0.88rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="custom-cursor"></div>
+    <div class="ambient-glow"></div>
+
+    <div class="video-background">
+        <iframe src="https://www.youtube.com/embed/KHrVwCrtZFY?autoplay=1&mute=1&loop=1&playlist=KHrVwCrtZFY&controls=0&showinfo=0&rel=0&modestbranding=1&start=0.3&end=13.7" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+
+    <div class="overlay"></div>
+
+    <div class="main-container">
+        <div class="glass-panel">
+            <h1>Page Creation</h1>
+            <nav class="button-list">
+                <div class="dropdown">
+                    <a href="https://ai-delta-eosin.vercel.app/" target="_blank" class="btn">IA</a>
+                    <div class="dropdown-content">
+                        <a href="https://www.perplexity.ai/" target="_blank" class="btn btn-sub">Perplexity</a>
+                        <a href="https://gemini.google.com/app?hl=es" target="_blank" class="btn btn-sub">Google Gemini</a>
+                        <a href="https://hackerai.co/" target="_blank" class="btn btn-sub">HackerAI</a>
+                        <a href="https://claude.ai/new" target="_blank" class="btn btn-sub">ClaudeAI</a>
+                        <a href="https://chatgpt.com/" target="_blank" class="btn btn-sub">ChatGPT</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href="https://github.com/" target="_blank" class="btn">GitHub</a>
+                    <div class="dropdown-content">
+                        <a href="https://github.com/new" target="_blank" class="btn btn-sub">Nuevo Repositorio</a>
+                    </div>
+                </div>
+
+                <a href="https://vercel.com/" target="_blank" class="btn">Vercel</a>
+                <a href="https://www.youtube.com/" target="_blank" class="btn">YouTube</a>
+            </nav>
+        </div>
+
+        <div class="instruction-panel">
+            <div class="lang-container">
+                <button class="btn btn-lang" onclick="setLang('es')">Español</button>
+                <button class="btn btn-lang" onclick="setLang('en')">English</button>
+            </div>
+            <div id="text-target" class="instruction-content">
+                <p style="opacity: 0.6; text-align: center; font-size: 0.85rem; margin: 0;">Selecciona el idioma del tutorial</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cursor mejorado
+        const cursor = document.getElementById('custom-cursor');
+
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        function updateCursorListeners() {
+            const links = document.querySelectorAll('a, button');
+            links.forEach(link => {
+                link.addEventListener('mouseenter', () => {
+                    cursor.classList.add('hover');
+                });
+                link.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('hover');
+                });
+            });
+        }
+        updateCursorListeners();
+
+        // Parallax refinado
+        const glassPanel = document.querySelector('.glass-panel');
+        const instructPanel = document.querySelector('.instruction-panel');
+
+        document.addEventListener('mousemove', e => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 80;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 80;
+
+            glassPanel.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg) scale(1)`;
+            instructPanel.style.transform = `rotateY(${xAxis * 0.9}deg) rotateX(${yAxis * 0.9}deg)`;
+        });
+
+        // Contenido
+        const content = {
+            es: `INSTRUCCIONES:
+            Comienza solicitando a una IA la creación de un archivo HTML utilizando un prompt.
+            Luego, crea un repositorio en GitHub. Dentro del repositorio, agrega un nuevo archivo llamado "index.html" y pega el código HTML generado.
+            Guarda los cambios en el repositorio para asegurarte de no perder el archivo.
+            Dirígete a Vercel y regístrate o inicia sesión utilizando tu cuenta de GitHub.
+            Una vez dentro, selecciona la opción "Add New Project" y elige el repositorio que creaste.
+            Finalmente, despliega el proyecto.`,
+            en: `INSTRUCTIONS:
+            Start by requesting an AI to create an HTML file using a prompt.
+            Then, create a repository on GitHub. Inside the repository, add a new file called "index.html" and paste the generated HTML code.
+            Save the changes to the repository to ensure you don't lose the file.
+            Go to Vercel and register or log in using your GitHub account.
+            Once logged in, select the "Add New Project" option and choose the repository you created.
+            Finally, deploy the project.`
+        };
+
+        function setLang(lang) {
+            document.getElementById('text-target').innerText = content[lang];
+        }
+
+        // Listeners dinámicos para nuevos elementos
+        const observer = new MutationObserver(updateCursorListeners);
+        observer.observe(document.body, { childList: true, subtree: true });
+    </script>
+</body>
+</html>

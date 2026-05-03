@@ -1,6 +1,8 @@
 {
   "name": "mi-app",
   "version": "1.0.0",
+  "description": "Mi app de escritorio",
+  "author": "Hector",
   "main": "main.js",
   "scripts": {
     "start": "electron .",

@@ -14,8 +14,9 @@
   },
   "build": {
     "appId": "com.miapp.desktop",
+    "productName": "Mi App",
     "win": {
-      "target": "nsis"
+      "target": ["nsis"]
     }
   }
 }

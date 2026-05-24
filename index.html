@@ -3,60 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sitio exportado</title>
+  <title>Diseño exportado</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="site">
-    <nav class="site-nav" aria-label="Principal">
-        <button type="button" class="nav-btn" data-screen="productos">Productos</button>
-        <button type="button" class="nav-btn" data-screen="inicio">Nuevo</button>
-    </nav>
-    <main class="site-main">
-      <section class="screen" id="screen-inicio" data-screen="inicio">
-        <div class="screen-bg" aria-hidden="true"></div>
-        <div class="screen-blocks">
-          <div class="block-btn-wrap" data-block="button-mpg6zgim-n0uq" style="position:absolute;left:23.46405258136616%;top:9.673202614379086%;width:25%;height:10%;box-sizing:border-box;"><a class="block-btn" href="#">Botón</a></div>
-          <header class="block-head" data-block="head-mpg6zhri-ei0e" style="position:absolute;left:2.4243305685938985%;top:4.346405228758172%;width:62.5%;height:18.5%;box-sizing:border-box;">
-            <h2>Título</h2>
-            <p>Subtítulo</p>
-          </header>
-        </div>
-      </section>
-
-      <section class="screen" id="screen-productos" data-screen="productos">
-        <div class="screen-bg" aria-hidden="true"></div>
-        <div class="screen-blocks">
-          <header class="block-head" data-block="b-head-2" style="position:absolute;left:41.52674672264833%;top:66.22911038174409%;width:21.62131849983362%;height:16%;box-sizing:border-box;">
-            <h2>Productos</h2>
-            <p>Tarjetas editables en el panel derecho.</p>
-          </header>
-          <div class="block-products" data-block="b-prod-1" style="position:absolute;left:56.50039672280275%;top:7.309016486309794%;width:16.492120583583002%;height:65.59090450789776%;box-sizing:border-box;">
-              <article class="product-card"><h3>Plan Básico</h3><p>9 €/mes</p></article>
-              <article class="product-card"><h3>Plan Pro</h3><p></p></article>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
-  <script>
-    (function () {
-      var btns = document.querySelectorAll(".nav-btn");
-      var screens = document.querySelectorAll(".screen");
-      function show(id) {
-        screens.forEach(function (s) {
-          s.classList.toggle("is-active", s.getAttribute("data-screen") === id);
-        });
-        btns.forEach(function (b) {
-          b.classList.toggle("is-active", b.getAttribute("data-screen") === id);
-        });
-      }
-      btns.forEach(function (b) {
-        b.addEventListener("click", function () { show(b.getAttribute("data-screen")); });
-      });
-      var first = document.querySelector(".nav-btn");
-      if (first) show(first.getAttribute("data-screen"));
-    })();
-  </script>
+  <main class="canvas exported-canvas" style="background: linear-gradient(135deg, #0b1d32, #10263f);">
+      <div class="canvas-item text" style="left: 1px; top: 92px; width: 420px; height: 160px; background: #154b88; color: #ffffff; font-size: 26px;">Diseña en el lienzo y exporta código</div>
+      <div class="canvas-item image" style="left: 193px; top: 206px; width: 360px; height: 240px;"><img src="https://img.magnific.com/fotos-premium/chica-anime-ojos-verdes-brillantes-cabello-negro-corto-estilo-anime-fondo-fantasia-colores-oscuros-verdes-llamas-verdes-su-alrededor_665569-17968.jpg?semt=ais_hybrid&amp;w=740&amp;q=80" alt="Imagen" /></div>
+  </main>
 </body>
 </html>

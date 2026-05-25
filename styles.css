@@ -16,7 +16,8 @@
 
 html, body {
   margin: 0;
-  min-height: 100%;
+  height: 100%;
+  overflow: hidden;
   font-family: Inter, system-ui, sans-serif;
   background: radial-gradient(circle at top, rgba(106, 178, 255, 0.12), transparent 22%),
     linear-gradient(180deg, #06101a 0%, #04080f 100%);
@@ -93,6 +94,8 @@ button, input, textarea, select {
   grid-template-columns: minmax(280px, 320px) minmax(0, 1fr) minmax(280px, 320px);
   gap: 1rem;
   align-items: stretch;
+  min-height: calc(100vh - 7rem);
+  overflow: hidden;
 }
 
 .app.panels-hidden .panel {
@@ -117,6 +120,8 @@ button, input, textarea, select {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  min-height: 0;
+  overflow: auto;
 }
 
 .panel-section {
@@ -205,11 +210,13 @@ textarea {
   justify-content: center;
   align-items: flex-start;
   padding: 1rem 0;
+  overflow: hidden;
 }
 
 .canvas-wrapper {
-  width: min(100%, 1140px);
-  min-height: 760px;
+  width: min(100%, 1920px);
+  max-width: 100%;
+  max-height: calc(100vh - 8rem);
   border-radius: 28px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(8, 16, 25, 0.92));
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -227,10 +234,10 @@ textarea {
 
 .canvas {
   position: relative;
-  width: 100%;
-  max-width: 1040px;
-  min-height: 720px;
-  aspect-ratio: 16 / 10;
+  width: min(100%, 1920px);
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: calc(100vh - 12rem);
   border-radius: 24px;
   background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.08), transparent 16%),
     linear-gradient(180deg, #07111e 0%, #091822 100%);
@@ -277,6 +284,24 @@ textarea {
   user-select: none;
   transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease;
   z-index: 1;
+}
+
+.resize-handle {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.canvas-item.selected .resize-handle {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .canvas-item.button {

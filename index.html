@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Canvas a código</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div>
+        <p class="brand">Canvas a código</p>
+        <p class="subtitle">Crea diseños en un lienzo y exporta HTML/CSS listos para web.</p>
+        <p class="screen-label">Pantalla: <strong id="active-screen-name">Principal</strong></p>
+      </div>
+      <div class="top-actions">
+        <button id="btn-undo" class="btn btn-outline">Deshacer</button>
+        <button id="btn-redo" class="btn btn-outline">Rehacer</button>
+        <button id="btn-toggle-panels" class="btn btn-ghost">Ocultar paneles</button>
+        <button id="btn-load-demo" class="btn btn-ghost">Cargar demo</button>
+        <button id="btn-export" class="btn btn-primary">Ver código</button>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <aside class="panel panel-left">
+        <section class="panel-section">
+          <h2>Pantallas</h2>
+          <ul id="screen-list" class="screen-list"></ul>
+          <div class="buttons-row">
+            <button id="btn-add-screen" class="btn btn-primary">Añadir pantalla</button>
+            <button id="btn-duplicate-screen" class="btn btn-outline">Duplicar pantalla</button>
+          </div>
+        </section>
+        <section class="panel-section">
+          <h2>Elementos</h2>
+          <div class="buttons-row">
+            <button id="btn-add-text" class="btn btn-primary">Texto</button>
+            <button id="btn-add-text-panel" class="btn btn-outline">Texto + panel</button>
+            <button id="btn-add-box" class="btn btn-outline">Bloque</button>
+            <button id="btn-add-button" class="btn btn-ghost">Botón</button>
+            <button id="btn-add-image" class="btn btn-ghost">Imagen</button>
+          </div>
+        </section>
+
+        <section class="panel-section">
+          <h2>Capas</h2>
+          <p class="hint">Arrastra las capas para cambiar el orden de apilado.</p>
+          <ul id="item-list" class="item-list"></ul>
+        </section>
+
+        <section class="panel-section">
+          <h2>Fondo del lienzo</h2>
+          <label class="field">
+            <span>Tipo de fondo</span>
+            <select id="canvas-bg-type">
+              <option value="gradient">Gradiente</option>
+              <option value="color">Color</option>
+              <option value="image">Imagen</option>
+              <option value="video">Video</option>
+            </select>
+          </label>
+          <div id="bg-color-group">
+            <label class="field">
+              <span>Color</span>
+              <input type="color" id="canvas-bg-color" value="#081620" />
+            </label>
+          </div>
+          <div id="bg-gradient-group">
+            <label class="field">
+              <span>Gradiente CSS</span>
+              <input type="text" id="canvas-bg-gradient" placeholder="linear-gradient(135deg, #0b1d32, #10263f)" />
+            </label>
+          </div>
+          <div id="bg-image-group" class="hidden">
+            <label class="field">
+              <span>URL de imagen</span>
+              <input type="url" id="canvas-bg-image" placeholder="https://..." />
+            </label>
+            <label class="field file-field">
+              <span>Subir imagen</span>
+              <input type="file" id="canvas-bg-image-file" accept="image/*" />
+            </label>
+          </div>
+          <div id="bg-video-group" class="hidden">
+            <label class="field">
+              <span>URL de video</span>
+              <input type="url" id="canvas-bg-video" placeholder="https://..." />
+            </label>
+            <label class="field file-field">
+              <span>Subir video</span>
+              <input type="file" id="canvas-bg-video-file" accept="video/*" />
+            </label>
+            <label class="field check-field">
+              <input type="checkbox" id="canvas-bg-video-loop" checked />
+              <span>Bucle</span>
+            </label>
+            <label class="field check-field">
+              <input type="checkbox" id="canvas-bg-video-muted" checked />
+              <span>Silenciar video</span>
+            </label>
+          </div>
+          <label class="field check-field">
+            <input type="checkbox" id="canvas-show-grid" />
+            <span>Mostrar cuadrícula</span>
+          </label>
+          <label class="field check-field">
+            <input type="checkbox" id="canvas-snap-grid" />
+            <span>Ajustar a cuadrícula</span>
+          </label>
+        </section>
+      </aside>
+
+      <main class="canvas-shell">
+        <div class="canvas-wrapper">
+          <div class="canvas" id="canvas" aria-label="Lienzo de diseño"></div>
+        </div>
+      </main>
+
+      <aside class="panel panel-right">
+        <section class="panel-section">
+          <h2>Propiedades</h2>
+          <div id="empty-state" class="empty-state">Selecciona un elemento para editar sus propiedades.</div>
+          <div id="properties-panel" class="properties-panel hidden">
+            <div class="property-row">
+              <span class="property-label">Tipo</span>
+              <span id="prop-type" class="property-value"></span>
+            </div>
+
+            <label class="field" id="prop-text-row">
+              <span>Texto</span>
+              <textarea id="prop-text" rows="3"></textarea>
+            </label>
+
+            <label class="field hidden" id="prop-link-row">
+              <span>Enlace del botón</span>
+              <input type="url" id="prop-link" placeholder="https://ejemplo.com" />
+            </label>
+            <label class="field" id="prop-target-screen-row">
+              <span>Navegar a pantalla</span>
+              <select id="prop-target-screen"></select>
+            </label>
+            <label class="field" id="prop-image-row">
+              <span>URL de imagen</span>
+              <input type="url" id="prop-image-src" placeholder="https://..." />
+            </label>
+
+            <label class="field" id="prop-color-row">
+              <span>Color de texto</span>
+              <input type="color" id="prop-color" />
+            </label>
+
+            <label class="field" id="prop-bg-row">
+              <span>Color de fondo</span>
+              <input type="color" id="prop-bg" />
+            </label>
+
+            <label class="field" id="prop-font-size-row">
+              <span>Tamaño de fuente</span>
+              <input type="range" id="prop-font-size" min="12" max="60" />
+              <output id="prop-font-size-val"></output>
+            </label>
+
+            <button id="btn-delete-element" class="btn btn-outline btn-block">Eliminar elemento</button>
+          </div>
+        </section>
+
+        <section class="panel-section panel-notice">
+          <h2>Exportar</h2>
+          <p class="hint">El código generado incluye HTML y CSS para tu lienzo. Usa el botón arriba.</p>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <dialog class="modal" id="export-modal">
+    <form method="dialog" class="modal-inner">
+      <h2>Exportar código</h2>
+      <div class="tabs">
+        <button type="button" class="tab active" data-tab="html">index.html</button>
+        <button type="button" class="tab" data-tab="css">styles.css</button>
+      </div>
+      <textarea class="export-textarea" id="export-textarea" readonly rows="18"></textarea>
+      <div class="modal-actions">
+        <button id="btn-copy-export" type="button" class="btn btn-primary">Copiar</button>
+        <button id="btn-download-export" type="button" class="btn btn-outline">Descargar</button>
+        <button type="submit" class="btn btn-ghost">Cerrar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
